@@ -51,13 +51,21 @@ var library = (function() {
 			Time: (function() {
 		  	return {
 	  	    WithSeconds: function(){   //return new Date().toLocaleTimeString();
-							var timeWithSeconds = new Date().getHours().toString() + ":" + new Date().getMinutes().toString() + ":" + new Date().getSeconds().toString() + " " + amPm();
-							function amPm() {
-								let hours = new Date().getHours();
-								return (hours > 11) ? 'PM' : 'AM';
-							};		
-							return timeWithSeconds;
+					var timeWithSeconds = doubleDigit(new Date().getHours().toString() % 12) + ":" + doubleDigit(new Date().getMinutes().toString()) + ":" + doubleDigit(new Date().getSeconds().toString()) + " " + amPm();
+					function amPm() {
+						let hours = new Date().getHours();
+						return (hours > 11) ? 'PM' : 'AM';
+					};		
+					return timeWithSeconds;
 					},
+
+			// var timeString = "18:00:00";
+			// var H = +timeString.substr(0, 2);
+			// var h = H % 12 || 12;
+			// var ampm = (H < 12 || H === 24) ? "AM" : "PM";
+			// timeString = h + timeString.substr(2, 3) + ampm;
+			
+			
 	   	    WithOutSeconds: function() {
 						 //var d = new Date();
 				   //var hours = d.getHours();
@@ -65,7 +73,7 @@ var library = (function() {
 				   //if (hours === 0) {
 					   //hours =12;
 				   //}
-				   var timeWithoutSeconds = new Date().getHours().toString() + ":" + new Date().getMinutes().toString() + " " + amPm();
+				   var timeWithoutSeconds = doubleDigit(new Date().getHours().toString()) % 12 + ":" + doubleDigit(new Date().getMinutes().toString()) + " " + amPm();
 				   function amPm() {
 						let hours = new Date().getHours();
 						return (hours > 11) ? 'PM' : 'AM';
@@ -79,16 +87,16 @@ var library = (function() {
 		    Numeral: function(){
 					var d = new Date();
 					var month = d.getMonth() + 1;
-					var day = d.detDate();
+					var day = d.getDate();
 					var year = d.getFullYear();
-					return month + '/' + 'day' + '/' + year;
+					return month + '/' + day + '/' + year;
 				},
 				Name: function(){
 					var d = new Date();
 					var month = months[d.getMonth()];
-					var day = d.detDate();
+					var day = d.getDate();
 					var year = d.getFullYear();
-					return month + ' ' + 'day' + ', ' + year;
+					return month + ' ' + day + ', ' + year;
 				}
 		  }
 		  })(),
@@ -160,11 +168,18 @@ var library = (function() {
 			  return day.substring(0, 2); //start at 0 index and take up to the end index but not the one at 2
 			},
 			WeekOfYear: function(){
-					var d = new Date(+this);
-    			d.setHours(0,0,0,0);
-    			d.setDate(d.getDate()+4-(d.getDay()||7));
-    			return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
+				var newDate = new Date();
+				var yearStart = new Date(newDate.getFullYear(),0,1);
+    			return Math.ceil( ( ( (newDate - yearStart) / 86400000) + yearStart.getDay() + 1) / 7).toString();
 			},
+			// Date.prototype.getWeek = function() {
+			// 	var onejan = new Date(this.getFullYear(), 0, 1);
+			// 	return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+			// }
+		
+			// var weekNumber = (new Date()).getWeek();
+		
+
 			// //var d = new Date();
 				// //return (d.getWeek().toString());
 				//  // Copy date so don't modify original
@@ -264,6 +279,8 @@ var library = (function() {
 			}
 		}
 	})(),
-	Defaults: function(){}
+	Defaults: function(){
+		return new Date();
+	}
   }
 })();
