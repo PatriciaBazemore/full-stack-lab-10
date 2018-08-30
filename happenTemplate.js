@@ -11,6 +11,12 @@ var library = (function() {
 		return value;
 	}
 
+	function turnitTwelve(value) {
+		if (value === 0) {
+			value = 12
+		};
+	}
+
 // function getOrdinal(value) {
 	// 	var suffix;
 	// 	var hundredPart = value % 100;
@@ -55,7 +61,7 @@ var library = (function() {
 					function amPm() {
 						let hours = new Date().getHours();
 						return (hours > 11) ? 'PM' : 'AM';
-					};		
+					};
 					return timeWithSeconds;
 					},
 
@@ -130,8 +136,8 @@ var library = (function() {
 			},
 			TwelveHour: function() {
 				let hours = new Date().getHours();
-				hours %= 12; // hours = hours % 12;
-				if (hours === 0) {
+				hours = hours % 12; // hours = hours % 12;
+				if (hours == 0) {
 					hours = 12;
 				}
 				return hours.toString();
@@ -279,8 +285,13 @@ var library = (function() {
 			}
 		}
 	})(),
-	Defaults: function(){
-		return new Date();
+	Defaults: function(){	
+		var thenewDate = new Date();
+		return thenewDate.getFullYear().toString() + '-' + doubleDigit( (thenewDate.getMonth() + 1).toString() ) + '-' + doubleDigit(thenewDate.getDate().toString())+'T'+doubleDigit(thenewDate.getHours().toString()) + ":" + doubleDigit(thenewDate.getMinutes().toString()) + ":" + doubleDigit(thenewDate.getSeconds().toString()) ;
 	}
+
+	
+	
   }
 })();
+
